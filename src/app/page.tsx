@@ -1,175 +1,49 @@
-'use client';
-import Image from 'next/image'
-import { useState, useEffect } from 'react';
-import { getMovies } from '../api';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faStar } from '@fortawesome/free-solid-svg-icons'
-import { Scrollbars } from 'react-custom-scrollbars-2';
-import Navbar from '@/app/components/Navbar';
-
-const POSTER_PLACEHOLDERS = ['placeholder-1.png', 'placeholder-2.jpg', 'placeholder-3.jpg', 'placeholder-4.jpg'];
-
-const getRandomNum = (max: number) => {
-  let rand = Math.random() * max;
-  return Math.floor(rand);
-}
-
-type Movie = {
-  id: number;
-  language: object;
-  overview: string;
-  popularity: number;
-  poster: string
-  production_company: object;
-  release_date: string;
-  title: string;
-  vote_avg: number;
-  vote_count: number;
-}
+import Image from "next/image";
+import Link from "next/link";
+import { FaFacebookF, FaGithub, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 
 export default function Home() {
-
-  const [limit, setLimit] = useState(50);
-  const [page, setPage] = useState(0);
-  const [movies, setMovies] = useState();
-
-  const loadMovies = () => {
-    getMovies(page, limit).then((resp) => {
-      setMovies(resp);
-    });
-  };
-
-  useEffect(() => {
-    loadMovies();
-  }, []);
-
-  const renderTrack = ({ style, ...props }) => {
-    // const { top } = state;
-    const trackStyle = {
-      backgroundColor: `#262F40`,
-      borderRadius: `4px`,
-      height: `100%`,
-      width: `0.8%`,
-      right: 2,
-      bottom: 0,
-      top: 0,
-      // backgroundColor: `rgb(${Math.round(255 - (0 * 255))}, ${Math.round(255 - (0 * 255))}, ${Math.round(255 - (0 * 255))})`
-    };
-    return <div style={{ ...style, ...trackStyle }} {...props} />;
-  };
-  const renderThumb = ({ style, ...props }) => {
-    // const { top } = state;
-    const thumbStyle = {
-      backgroundColor: `rgb(216, 180, 254)`,
-      borderRadius: `6px`,
-      width: `45%`,
-      margin: `auto`,
-      // backgroundColor: `rgb(${Math.round(255 - (0 * 255))}, ${Math.round(255 - (0 * 255))}, ${Math.round(255 - (0 * 255))})`
-    };
-    return <div style={{ ...style, ...thumbStyle }} {...props} />;
-  };
-
   return (
-    <main className="flex min-h-screen flex-col gap-3 items-center justify-between px-10 py-10 pt-4">
-      <div className="flex flex-col max-w-5xl items-center w-full">
-      <Navbar />
-        <Scrollbars
-          universal={true}
-          style={{ height: '80vh' }}
-          renderThumbVertical={renderThumb}
-          renderTrackVertical={renderTrack}
-        >
-      <div className="grid grid-cols-5 gap-2 mt-3">
-        {movies && movies.length > 0 && movies.map((mov: Movie) => {
-          const poster = !mov.poster ? `/movie-placeholders/${POSTER_PLACEHOLDERS[getRandomNum(POSTER_PLACEHOLDERS.length)]}` : mov.poster;
-          return (
-            <div className="flex flex-col w-44 h-80" key={mov.id}>
-              <div className="w-44 h-60 relative cursor-pointer">
-                <Image alt="image-poster" src={poster} fill={true} />
-              </div>
-              <div className="flex justify-between w-full text-xs font-medium">
-                <p>{mov.release_date}</p>
-                <p>{mov.vote_avg} <FontAwesomeIcon icon={faStar} /></p>
-              </div>
-              <p className="w-full text-xs font-semibold leading-none cursor-pointer">
-                {mov.title}
-              </p>
+    <main className="flex h-full flex-col justify-between font-mono">
+      <div className="w-56 h-screen flex flex-col gap-4 bg-slate-100 pt-8 shadow-xl drop-shadow-xl">
+        <h3 className="text-3xl font-bold text-center">Wenakkk</h3>
+        <button className="rounded-3xl text-sm bg-green-700 hover:bg-green-800 text-white w-4/6 mx-auto py-2 drop-shadow-lg">
+          Sign Up / Log In
+        </button>
+        <div className="flex flex-col justify-between h-full">
+          <ul className="menu w-full rounded-box font-semibold px-2">
+            <li><a>Smart Thermometer</a></li>
+            <li><a>Meal Planning</a></li>
+            <li>
+              <details>
+                <summary>Recipes</summary>
+                <ul>
+                  <li><a>Trending</a></li>
+                  <li><a>Find your Taste</a></li>
+                  <li><a>Explore the World</a></li>
+                  <li><a>By Categories</a></li>
+                </ul>
+              </details>
+            </li>
+          </ul>
+          <div className="flex flex-col bg-slate-300 drop-shadow-lg px-6 pb-4 pt-2 gap-4">
+            <div className="flex flex-col text-sm text-slate-600 font-medium">
+              <Link href={"/"}>About Us</Link>
+              <Link href={"/"}>Privacy</Link>
             </div>
-          );
-        })}
+            <div className="flex gap-2 justify-between mx-6">
+              <a href=""><FaGithub size={'1.5em'} /></a>
+              <a href=""><FaFacebookF size={'1.5em'} /></a>
+              <a href=""><FaInstagram size={'1.5em'} /></a>
+              <a href=""><FaLinkedinIn size={'1.5em'} /></a>
+            </div>
+            <p className="text-xs">®/™©2024 Wenakkk by Hari Setiawan. All rights reserved.</p>
+          </div>
+        </div>
       </div>
-      </Scrollbars>
-      </div>
+      <div className="w-5/6">
 
-      <div className="mb-4 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore the Next.js 13 playground.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
       </div>
     </main>
-  )
+  );
 }
